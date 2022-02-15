@@ -1,0 +1,42 @@
+image: docker-git-ssh-minimal
+stages:
+- sync
+before_script:
+  - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+  - 'command -v git >/dev/null || ( apt-get update -y && apt-get install git -y )'
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$STAGING_PRIVATE_KEY" | base64 -d)
+  - mkdir ~/.ssh/
+  - ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
+  - git config --global user.name "${GITLAB_USER_NAME}"
+  - git config --global user.email "${GITLAB_USER_EMAIL}"
+  - git config --global pull.rebase false
+sync_PROJECT1:
+  stage: sync
+  only:
+    - main
+  script:
+    - git clone "${GITLAB_USER_NAME}@gitlab.com:${GITLAB_USER_NAME}/PROJECT1"
+    - cd PROJECT1
+    - git remote add github https://github.com/PROJECT1MAINTAINER/PROJECT1
+    - git checkout master
+    - git pull origin master
+    - git pull github master
+    - git remote -v
+    - git status
+    - git push "${GITLAB_USER_NAME}@gitlab.com:${GITLAB_USER_NAME}/PROJECT1"
+sync_PROJECT2:
+  stage: sync
+  only:
+    - main
+  script:
+    - git clone "${GITLAB_USER_NAME}@gitlab.com:${GITLAB_USER_NAME}/PROJECT2"
+    - cd PROJECT2
+    - git remote add github https://github.com/PROJECT1MAINTAINER/PROJECT2
+    - git checkout main
+    - git pull origin main
+    - git pull github main
+    - git remote -v
+    - git status
+    - git push "${GITLAB_USER_NAME}@gitlab.com:${GITLAB_USER_NAME}/PROJECT2"
+
