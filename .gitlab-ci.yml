@@ -16,7 +16,7 @@ sync_PROJECT1:
   only:
     - main
   script:
-    - git clone "${GITLAB_USER_NAME}@gitlab.com:${GITLAB_USER_NAME}/PROJECT1"
+    - git clone "${GITLAB_USER_NAME}@gitlab.com:PROJECT1MAINTAINER/PROJECT1"
     - cd PROJECT1
     - git remote add github https://github.com/PROJECT1MAINTAINER/PROJECT1
     - git checkout master
@@ -24,19 +24,19 @@ sync_PROJECT1:
     - git pull github master
     - git remote -v
     - git status
-    - git push "${GITLAB_USER_NAME}@gitlab.com:${GITLAB_USER_NAME}/PROJECT1"
+    - git push "${GITLAB_USER_NAME}@gitlab.com:PROJECT1MAINTAINER/PROJECT1"
 sync_PROJECT2:
   stage: sync
   only:
     - main
   script:
-    - git clone "${GITLAB_USER_NAME}@gitlab.com:${GITLAB_USER_NAME}/PROJECT2"
+    - git clone "${GITLAB_USER_NAME}@gitlab.com:PROJECT2MAINTAINER/PROJECT2"
     - cd PROJECT2
-    - git remote add github https://github.com/PROJECT1MAINTAINER/PROJECT2
+    - git remote add github https://github.com/PROJECT2MAINTAINER/PROJECT2
     - git checkout main
     - git pull origin main
     - git pull github main
     - git remote -v
     - git status
-    - git push "${GITLAB_USER_NAME}@gitlab.com:${GITLAB_USER_NAME}/PROJECT2"
+    - git push "${GITLAB_USER_NAME}@gitlab.com:PROJECT2MAINTAINER/PROJECT2"
 
